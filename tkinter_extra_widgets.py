@@ -52,6 +52,11 @@ progress=Progressbar(frame2,length=100)
 progress.pack(side=LEFT)
 progress['value']=50
 
+#indeterminate progress
+progress2=Progressbar(frame2,length=100, mode='indeterminate')
+progress2.pack(side=LEFT)
+progress2.start()
+
 button1=Button(frame2,text="Increase",command=IncreaseValue)
 button1.pack(side=LEFT)
 
