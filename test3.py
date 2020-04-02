@@ -1,75 +1,59 @@
-from tkinter import *
+import speech_recognition as sr
 
-window=Tk()
+# get audio from the microphone
+audio_text=""
+r = sr.Recognizer()
+with sr.Microphone() as source:
+    print("Speak:")
+    audio = r.listen(source)
 
-mainFrame=Frame(window,bg="#1B2631")
-mainFrame.pack(expand=True,fill="both")
+try:
+    audio_text=r.recognize_google(audio)
+    print("You said " + audio_text)
+except sr.UnknownValueError:
+    print("Could not understand audio")
+except sr.RequestError as e:
+    print("Could not request results; {0}".format(e))
 
-frame=Frame(mainFrame,bg="#F39C12",height=200,padx=5,pady=5)
-label=Label(frame,text="Single Full Screen",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.pack(fill="x")
-label=Label(frame,text="Single Full Screen",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.pack(fill="x")
-label=Label(frame,text="Single Full Screen",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.pack(fill="x")
-label=Label(frame,text="Single Full Screen",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.pack(fill="x")
-frame.pack(fill="x")
+#
+# text to speech
+from gtts import gTTS
+
+# This module is imported so that we can
+# play the converted audio
+import os
+
+# The text that you want to convert to audio
+mytext = audio_text
+
+# Language in which you want to convert
+language = 'en'
+
+# Passing the text and language to the engine,
+# here we have marked slow=False. Which tells
+# the module that the converted audio should
+# have a high speed
+myobj = gTTS(text=mytext, lang=language, slow=False)
+
+# Saving the converted audio in a mp3 file named
+# welcome
+myobj.save("welcome.mp3")
+
+# Playing the converted file
+from playsound import playsound
+playsound('demo.mp3')
 
 
-frame2=Frame(mainFrame,bg="#9B59B6",height=200,padx=5,pady=5)
-label=Label(frame2,text="Double Column Full 1",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=0,column=0,sticky="nsew")
-label=Label(frame2,text="Double Column Full 2",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=0,column=1,sticky="nsew")
-label=Label(frame2,text="Double Column Full 3",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=0,column=2,sticky="nsew")
-label=Label(frame2,text="Double Column Full 4",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=0,column=3,sticky="nsew")
-frame2.pack(fill="x")
-frame2.grid_columnconfigure(0, weight=1)
-frame2.grid_columnconfigure(1, weight=1)
-frame2.grid_columnconfigure(2, weight=1)
-frame2.grid_columnconfigure(3, weight=1)
 
-frame3=Frame(mainFrame,bg="#9B59B6",height=200,padx=5,pady=5)
-label=Label(frame3,text="Double Column Full 1",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=0,column=0,sticky="nsew")
-label=Label(frame3,text="Double Column Full 2",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=0,column=1,sticky="nsew")
-label=Label(frame3,text="Double Column Full 3",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=0,column=2,sticky="nsew")
-label=Label(frame3,text="Double Column Full 4",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=0,column=3,sticky="nsew")
-frame3.pack(fill="x")
-label=Label(frame3,text="Double Column Full 1",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=1,column=0,sticky="nsew")
-label=Label(frame3,text="Double Column Full 2",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=1,column=1,sticky="nsew")
-label=Label(frame3,text="Double Column Full 3",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=1,column=2,sticky="nsew")
-label=Label(frame3,text="Double Column Full 4",padx=10,pady=10,relief="raised")
-label.config(font=("Arial","18"))
-label.grid(row=1,column=3,sticky="nsew")
-frame3.pack(fill="x")
-frame3.grid_columnconfigure(0, weight=1)
-frame3.grid_columnconfigure(1, weight=1)
-frame3.grid_columnconfigure(2, weight=1)
-frame3.grid_columnconfigure(3, weight=1)
+import pygame
+from time import sleep
+pygame.mixer.init()
+pygame.mixer.music.load(open("demo.mp3","rb"))
+print("")
+pygame.mixer.music.play()
+while pygame.mixer.music.get_busy():
+    pass
+    #print("Playing")
+    #sleep(1)
+print("done")
 
-window.mainloop()
